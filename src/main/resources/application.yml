@@ -1,0 +1,22 @@
+spring:
+  servlet:
+    multipart:
+      max-request-size: 50MB
+      max-file-size: 50MB
+  messages:
+    encoding: UTF-8
+  profiles:
+    include: mysql
+  application:
+    name: '@project.artifactId@'
+    version: '@project.version@'
+  web:
+    locale-resolver: accept_header
+    locale: fa_IR
+  task:
+    scheduling:
+      pool:
+        size: 3
+
+server:
+  port: ${APP_PORT:5000}

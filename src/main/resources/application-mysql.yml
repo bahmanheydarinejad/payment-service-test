@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:mysql://mysql9:3306/payment-service?unicode=true&characterEncoding=UTF-8
+    username: mysql
+    password: mysql
+  jpa:
+    hibernate:
+      ddl-auto: update

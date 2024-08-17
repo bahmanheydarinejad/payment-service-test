@@ -1,0 +1,56 @@
+services:
+
+  payment-service:
+    image: openjdk:22
+    container_name: payment-service
+    hostname: payment-service
+    environment:
+      APP_PORT: 5000
+    ports:
+      - '5000:5000'
+    networks:
+      app-net:
+    depends_on:
+      - artifact-maker
+      - mysql
+    volumes:
+      - artifactory:/app/artifacts
+    command: [ "java", "-jar", "/app/artifacts/app.jar" ]
+
+  mysql:
+    image: mysql:9.0.1
+    container_name: mysql9
+    hostname: mysql9
+    environment:
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+      MYSQL_ROOT_PASSWORD: mysql@123456
+      MYSQL_DATABASE: payment-service
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      app-net:
+
+  artifact-maker:
+    image: maven:3.9.8-eclipse-temurin-22
+    container_name: artifact-maker
+    hostname: artifact-maker
+    environment:
+      GIT_REPOSITORY_URL: https://github.com/bahmanheydarinejad/payment-service-test.git
+    volumes:
+      - maven-m2:/root/.m2
+      - ./script.sh:/script.sh
+      - artifactory:/app/artifacts
+    entrypoint:
+      - /bin/bash
+      - /script.sh
+
+networks:
+  app-net:
+
+volumes:
+  mysql-data:
+  artifactory:
+  maven-m2:
